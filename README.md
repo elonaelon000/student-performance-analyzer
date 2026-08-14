@@ -1,10 +1,3 @@
-# Student Performance Analyzer
-
-A Python data-analysis project that reads student performance data from CSV, validates the dataset, calculates academic metrics with pandas, studies the relationship between study hours and grades, and generates visualizations with Matplotlib.
-
-## Version 2 Highlights
-
-Version 2 moves the project from basic Python data processing to a more realistic data-analysis workflow.
 
 - Uses **pandas** for loading, validating, transforming, and analyzing data
 - Calculates student averages, subject averages, pass rate, and ranking
@@ -26,7 +19,7 @@ Version 2 moves the project from basic Python data processing to a more realisti
 ## Project Structure
 
 ```text
-dayOne/
+student-performance-analyzer/
 |-- app.py
 |-- analysis.py
 |-- visualizations.py
@@ -46,8 +39,8 @@ dayOne/
 Clone the repository and enter the project folder:
 
 ```bash
-git clone https://github.com/elonaelon000/dayOne.git
-cd dayOne
+git clone https://github.com/elonaelon000/student-performance-analyzer.git
+cd student-performance-analyzer
 ```
 
 Create a virtual environment:
