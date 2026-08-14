@@ -1,68 +1,32 @@
+<div align="center">
 
-- Uses **pandas** for loading, validating, transforming, and analyzing data
-- Calculates student averages, subject averages, pass rate, and ranking
-- Calculates the **Pearson correlation** between study hours and overall grades
-- Generates two **Matplotlib** charts automatically
-- Keeps readable validation errors for malformed CSV data
-- Includes automated tests for both analysis and visualization code
-- Separates the project into analysis, visualization, and command-line layers
+# Student Performance Analyzer
 
-## Technologies
+**A Python data analysis project exploring academic performance, study habits, and grade correlations.**
 
-- Python
-- pandas
-- Matplotlib
-- CSV
-- unittest
-- Git and GitHub
+`Python` · `pandas` · `Matplotlib` · `unittest`
 
-## Project Structure
+</div>
 
-```text
-student-performance-analyzer/
-|-- app.py
-|-- analysis.py
-|-- visualizations.py
-|-- requirements.txt
-|-- data/
-|   `-- students.csv
-|-- tests/
-|   |-- test_analysis.py
-|   `-- test_visualizations.py
-|-- output/                 # generated when the program runs
-|-- .gitignore
-`-- README.md
-```
+---
 
-## Setup
+## ✦ Overview
 
-Clone the repository and enter the project folder:
+Student Performance Analyzer turns student CSV data into clear academic insights. It analyzes grades, compares subject performance, ranks students, examines the relationship between study hours and grades, and automatically generates visualizations.
 
-```bash
-git clone https://github.com/elonaelon000/student-performance-analyzer.git
-cd student-performance-analyzer
-```
+I built this project incrementally to strengthen my skills in **Python, data analysis, statistics, testing, and modular software design**.
 
-Create a virtual environment:
+## ✦ What It Does
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-```
+- Calculates individual and class averages
+- Compares average performance across subjects
+- Calculates pass rate and student rankings
+- Measures **Pearson correlation** between study hours and overall grades
+- Generates two Matplotlib visualizations automatically
+- Validates malformed or incomplete CSV data
+- Includes **11 automated tests**
 
-Install the dependencies:
-
-```bash
-python3 -m pip install -r requirements.txt
-```
-
-## Run the Analyzer
-
-```bash
-python3 app.py
-```
-
-With the included sample dataset, the program reports results such as:
+## ✦ Example Output
 
 ```text
 STUDENT PERFORMANCE ANALYZER - VERSION 2
@@ -78,70 +42,74 @@ Study-hours analysis:
 Correlation: 0.98 (strong positive relationship)
 ```
 
-It also prints subject averages and a complete student ranking.
+> Correlation describes an association in the available data; it does not prove that additional study hours caused the grade differences.
 
-## Visualizations
-
-Running the program creates an `output/` directory with:
+## ✦ Project Structure
 
 ```text
-output/
-|-- subject_averages.png
-`-- study_hours_vs_average.png
+student-performance-analyzer/
+├── app.py
+├── analysis.py
+├── visualizations.py
+├── requirements.txt
+├── data/
+│   └── students.csv
+├── tests/
+│   ├── test_analysis.py
+│   └── test_visualizations.py
+├── output/                 # generated when the program runs
+├── .gitignore
+└── README.md
 ```
 
-The first chart compares average grades across subjects. The second is a scatter plot showing study hours against each student's overall average.
+## ✦ Run Locally
 
-## Correlation Analysis
+```bash
+git clone https://github.com/elonaelon000/student-performance-analyzer.git
+cd student-performance-analyzer
 
-The project calculates the Pearson correlation coefficient between `study_hours` and each student's overall grade average.
-
-A positive value means that higher study hours tend to appear alongside higher grades in the dataset. A negative value means the variables tend to move in opposite directions.
-
-**Important:** correlation describes an association in the available data; it does not prove that additional study hours caused the grade differences.
-
-## Data Validation
-
-The CSV file must contain these columns:
-
-```text
-name,math,programming,statistics,study_hours
+python3 -m venv .venv
+source .venv/bin/activate
+python3 -m pip install -r requirements.txt
+python3 app.py
 ```
 
-Validation rules include:
+## ✦ Visualizations
 
-- names cannot be empty
-- grades must be numeric
-- grades must be between `0` and `100`
-- study hours must be numeric
-- study hours cannot be negative
+Running the analyzer generates:
 
-Invalid input produces a readable error rather than an unhandled crash.
+- `subject_averages.png` — compares average grades across subjects
+- `study_hours_vs_average.png` — visualizes study hours against overall grade averages
 
-## Run the Tests
+## ✦ Testing
+
+Run the complete test suite with:
 
 ```bash
 python3 -m unittest discover -s tests -v
 ```
 
-The Version 2 suite contains **11 automated tests** covering data loading, validation, averages, pass rate, ranking, correlation, and chart generation.
+The project currently includes **11 automated tests** covering data loading, validation, averages, pass rate, ranking, correlation, and chart generation.
 
-## Why I Built This
+## ✦ What I Learned
 
-I am developing this project incrementally to practice both software engineering and data-science concepts. Version 1 established validation and testing with the Python standard library. Version 2 introduces pandas, visualization, statistical analysis, dependency management, and a more modular project structure.
+This project started as a smaller Python exercise and developed into a more structured data-analysis application. Through the process, I practiced separating analysis from visualization and command-line logic, working with pandas, interpreting statistical relationships, validating real input data, and testing program behavior.
 
-## Next Steps
+## ✦ Next
 
-Planned Version 3 improvements include:
+Future improvements I would like to explore:
 
-- interactive Streamlit dashboard
+- Interactive Streamlit dashboard
 - CSV upload through a browser interface
-- interactive filters and metrics
-- richer statistical summaries
+- Interactive filters and metrics
+- Richer statistical summaries
 - GitHub Actions continuous integration
 
-## Author
+---
+
+<div align="center">
 
 **Elona Tarja**  
-Informatics Engineering Student  
-Interested in Data Science, Artificial Intelligence, and Software Development
+Computer Engineering Student · Data Analytics · Learning Machine Learning
+
+</div>
