@@ -1,4 +1,6 @@
+from math import isnan
 from pathlib import Path
+from typing import IO
 
 import pandas as pd
 
@@ -8,13 +10,17 @@ PASSING_GRADE = 60
 MIN_GRADE = 0
 MAX_GRADE = 100
 
+CsvSource = str | Path | IO[str] | IO[bytes]
 
-def load_students(file_path: Path) -> pd.DataFrame:
-    """Load and validate student data from a CSV file."""
+
+def load_students(file_source: CsvSource) -> pd.DataFrame:
+    """Load and validate student data from a CSV path or file-like object."""
     try:
-        frame = pd.read_csv(file_path)
+        frame = pd.read_csv(file_source)
     except pd.errors.EmptyDataError as exc:
         raise ValueError("The CSV file is empty.") from exc
+    except pd.errors.ParserError as exc:
+        raise ValueError("The CSV file could not be parsed.") from exc
 
     missing_columns = [column for column in REQUIRED_COLUMNS if column not in frame.columns]
     if missing_columns:
@@ -88,3 +94,28 @@ def study_hours_correlation(frame: pd.DataFrame) -> float:
     if len(analyzed) < 2:
         return float("nan")
     return float(analyzed["study_hours"].corr(analyzed["average"]))
+
+
+def describe_correlation(value: float) -> str:
+    """Return a plain-language description of a correlation value."""
+    if isnan(value):
+        return "not enough data"
+
+    strength = abs(value)
+    if strength >= 0.7:
+        label = "strong"
+    elif strength >= 0.4:
+        label = "moderate"
+    elif strength >= 0.2:
+        label = "weak"
+    else:
+        label = "very weak"
+
+    if value > 0:
+        direction = "positive"
+    elif value < 0:
+        direction = "negative"
+    else:
+        direction = "no"
+
+    return f"{label} {direction} relationship"
