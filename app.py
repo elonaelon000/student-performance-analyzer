@@ -1,118 +1,79 @@
-import csv
+from math import isnan
 from pathlib import Path
-from statistics import mean
+
+from analysis import (
+    SUBJECTS,
+    load_students,
+    pass_rate,
+    rank_students,
+    study_hours_correlation,
+    subject_averages,
+)
+from visualizations import generate_charts
 
 DATA_FILE = Path("data/students.csv")
-SUBJECTS = ("math", "programming", "statistics")
-REQUIRED_COLUMNS = ("name", *SUBJECTS, "study_hours")
-PASSING_GRADE = 60
-MIN_GRADE = 0
-MAX_GRADE = 100
+OUTPUT_DIR = Path("output")
 
 
-def _parse_number(value: str | None, field_name: str, row_number: int) -> float:
-    """Convert a CSV value to a float and raise a clear validation error."""
-    try:
-        return float(value)
-    except (TypeError, ValueError) as exc:
-        raise ValueError(
-            f"Row {row_number}: '{field_name}' must contain a number."
-        ) from exc
+def describe_correlation(value: float) -> str:
+    """Return a plain-language description of a correlation value."""
+    if isnan(value):
+        return "not enough data"
+
+    strength = abs(value)
+    if strength >= 0.7:
+        label = "strong"
+    elif strength >= 0.4:
+        label = "moderate"
+    elif strength >= 0.2:
+        label = "weak"
+    else:
+        label = "very weak"
+
+    if value > 0:
+        direction = "positive"
+    elif value < 0:
+        direction = "negative"
+    else:
+        direction = "no"
+
+    return f"{label} {direction} relationship"
 
 
-def load_students(file_path: Path) -> list[dict]:
-    """Load and validate student records from a CSV file."""
-    with file_path.open(newline="", encoding="utf-8") as csv_file:
-        reader = csv.DictReader(csv_file)
+def print_report(students) -> None:
+    """Print the pandas-based student performance report."""
+    ranked = rank_students(students)
+    top_student = ranked.iloc[0]
+    averages = subject_averages(students)
+    overall_average = float(ranked["average"].mean())
+    correlation = study_hours_correlation(students)
 
-        if not reader.fieldnames:
-            raise ValueError("The CSV file must include a header row.")
-
-        missing_columns = [
-            column for column in REQUIRED_COLUMNS if column not in reader.fieldnames
-        ]
-        if missing_columns:
-            missing = ", ".join(missing_columns)
-            raise ValueError(f"Missing required CSV column(s): {missing}")
-
-        students = []
-
-        for row_number, row in enumerate(reader, start=2):
-            name = (row.get("name") or "").strip()
-            if not name:
-                raise ValueError(f"Row {row_number}: 'name' cannot be empty.")
-
-            student = {"name": name}
-
-            for subject in SUBJECTS:
-                grade = _parse_number(row.get(subject), subject, row_number)
-                if not MIN_GRADE <= grade <= MAX_GRADE:
-                    raise ValueError(
-                        f"Row {row_number}: '{subject}' must be between "
-                        f"{MIN_GRADE} and {MAX_GRADE}."
-                    )
-                student[subject] = grade
-
-            study_hours = _parse_number(
-                row.get("study_hours"), "study_hours", row_number
-            )
-            if study_hours < 0:
-                raise ValueError(
-                    f"Row {row_number}: 'study_hours' cannot be negative."
-                )
-            student["study_hours"] = study_hours
-            students.append(student)
-
-    return students
-
-
-def student_average(student: dict) -> float:
-    """Return a student's average across all subjects."""
-    return mean(student[subject] for subject in SUBJECTS)
-
-
-def subject_average(students: list[dict], subject: str) -> float:
-    """Return the class average for one subject."""
-    if subject not in SUBJECTS:
-        raise ValueError(f"Unknown subject: {subject}")
-    if not students:
-        raise ValueError("Cannot calculate a subject average without students.")
-    return mean(student[subject] for student in students)
-
-
-def pass_rate(students: list[dict]) -> float:
-    """Return the percentage of students whose overall average is passing."""
-    if not students:
-        return 0.0
-    passed = sum(student_average(student) >= PASSING_GRADE for student in students)
-    return passed / len(students) * 100
-
-
-def print_report(students: list[dict]) -> None:
-    """Print a simple performance report to the terminal."""
-    ranked_students = sorted(students, key=student_average, reverse=True)
-    top_student = ranked_students[0]
-    overall_average = mean(student_average(student) for student in students)
-
-    print("STUDENT PERFORMANCE ANALYZER")
-    print("-" * 36)
+    print("STUDENT PERFORMANCE ANALYZER - VERSION 2")
+    print("-" * 42)
     print(f"Students analyzed: {len(students)}")
     print(f"Overall class average: {overall_average:.1f}%")
     print(f"Pass rate: {pass_rate(students):.1f}%")
     print()
     print("Top student:")
-    print(f"{top_student['name']} - {student_average(top_student):.1f}%")
+    print(f"{top_student['name']} - {top_student['average']:.1f}%")
     print()
     print("Subject averages:")
 
     for subject in SUBJECTS:
         display_name = subject.replace("_", " ").title()
-        print(f"{display_name}: {subject_average(students, subject):.1f}%")
+        print(f"{display_name}: {averages[subject]:.1f}%")
+
+    print()
+    print("Study-hours analysis:")
+    if isnan(correlation):
+        print("Correlation: not enough data")
+    else:
+        print(f"Correlation: {correlation:.2f} ({describe_correlation(correlation)})")
 
     print()
     print("Student ranking:")
-    for position, student in enumerate(ranked_students, start=1):
-        print(f"{position}. {student['name']} - {student_average(student):.1f}%")
+    for position, (_, student) in enumerate(ranked.iterrows(), start=1):
+        print(f"{position}. {student['name']} - {student['average']:.1f}%")
 
 
 def main() -> None:
@@ -126,11 +87,22 @@ def main() -> None:
         print(f"Could not analyze student data: {exc}")
         return
 
-    if not students:
+    if students.empty:
         print("No student records were found.")
         return
 
     print_report(students)
+
+    try:
+        chart_paths = generate_charts(students, OUTPUT_DIR)
+    except OSError as exc:
+        print(f"Could not save charts: {exc}")
+        return
+
+    print()
+    print("Charts created:")
+    for path in chart_paths:
+        print(f"- {path}")
 
 
 if __name__ == "__main__":
