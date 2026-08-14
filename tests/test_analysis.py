@@ -1,11 +1,13 @@
 import tempfile
 import unittest
+from io import StringIO
 from pathlib import Path
 
 import pandas as pd
 
 from analysis import (
     add_average_column,
+    describe_correlation,
     load_students,
     pass_rate,
     rank_students,
@@ -73,6 +75,11 @@ class StudentPerformanceAnalysisTests(unittest.TestCase):
         correlation = study_hours_correlation(self.students)
         self.assertGreater(correlation, 0.9)
 
+    def test_describe_correlation(self) -> None:
+        self.assertEqual(describe_correlation(0.85), "strong positive relationship")
+        self.assertEqual(describe_correlation(-0.5), "moderate negative relationship")
+        self.assertEqual(describe_correlation(0.0), "very weak no relationship")
+
     def test_load_students_parses_valid_csv(self) -> None:
         path = self._write_csv(
             "name,math,programming,statistics,study_hours\n"
@@ -81,6 +88,15 @@ class StudentPerformanceAnalysisTests(unittest.TestCase):
         students = load_students(path)
         self.assertEqual(students.loc[0, "name"], "Ada")
         self.assertEqual(students.loc[0, "programming"], 80.0)
+
+    def test_load_students_accepts_file_like_upload(self) -> None:
+        uploaded = StringIO(
+            "name,math,programming,statistics,study_hours\n"
+            "Ada,90,80,70,10\n"
+        )
+        students = load_students(uploaded)
+        self.assertEqual(students.loc[0, "name"], "Ada")
+        self.assertEqual(students.loc[0, "study_hours"], 10.0)
 
     def test_load_students_rejects_missing_column(self) -> None:
         path = self._write_csv(
