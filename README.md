@@ -2,6 +2,8 @@
 
 A Python data-analysis project that validates student CSV data, calculates academic metrics with pandas, studies the relationship between study hours and grades, and presents the results through both a command-line workflow and an interactive Streamlit dashboard.
 
+**Live demo:** https://student-performance-analyzer-elonagit.streamlit.app/
+
 ## Version 3 Highlights
 
 Version 3 turns the analyzer into a browser-based data application while keeping the tested Version 2 analysis pipeline.
@@ -141,9 +143,11 @@ Version 3 contains **16 automated tests** covering loading, validation, averages
 
 GitHub Actions runs the test suite for pull requests and pushes to `main`. The workflow also compiles the Streamlit entrypoint to catch syntax errors.
 
-## Deployment Status
+## Deployment
 
-The Streamlit application is ready for local verification. A public deployment URL will be added only after the Version 3 branch is verified and merged.
+The Streamlit dashboard is deployed at:
+
+https://student-performance-analyzer-elonagit.streamlit.app/
 
 ## Why I Built This
 
