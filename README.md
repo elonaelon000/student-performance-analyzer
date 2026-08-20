@@ -4,19 +4,6 @@ A Python data-analysis project that validates student CSV data, calculates acade
 
 **Live demo:** https://student-performance-analyzer-elonagit.streamlit.app/
 
-## Version 3 Highlights
-
-Version 3 turns the analyzer into a browser-based data application while keeping the tested Version 2 analysis pipeline.
-
-- Interactive **Streamlit dashboard**
-- Browser-based **CSV upload** with the same validation rules as the CLI
-- Headline metrics for class average, pass rate, top student, and correlation
-- Filterable student ranking table
-- Interactive subject-average bar chart
-- Interactive study-hours vs. performance scatter chart
-- Shared analysis logic between the CLI and web app
-- GitHub Actions continuous integration for automated tests
-
 ## Technologies
 
 - Python
@@ -137,8 +124,6 @@ Validation rules include:
 python3 -m unittest discover -s tests -v
 ```
 
-Version 3 contains **16 automated tests** covering loading, validation, averages, pass rate, ranking, correlation, dashboard summaries and filters, chart-data preparation, and Matplotlib output.
-
 ## Continuous Integration
 
 GitHub Actions runs the test suite for pull requests and pushes to `main`. The workflow also compiles the Streamlit entrypoint to catch syntax errors.
@@ -157,4 +142,4 @@ I am developing this project incrementally to practice software engineering and 
 
 **Elona Tarja**  
 Informatics Engineering Student  
-Interested in Data Science, Artificial Intelligence, and Software Development
+
