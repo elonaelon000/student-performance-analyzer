@@ -3,6 +3,7 @@ from pathlib import Path
 
 from analysis import (
     SUBJECTS,
+    describe_correlation,
     load_students,
     pass_rate,
     rank_students,
@@ -15,31 +16,6 @@ DATA_FILE = Path("data/students.csv")
 OUTPUT_DIR = Path("output")
 
 
-def describe_correlation(value: float) -> str:
-    """Return a plain-language description of a correlation value."""
-    if isnan(value):
-        return "not enough data"
-
-    strength = abs(value)
-    if strength >= 0.7:
-        label = "strong"
-    elif strength >= 0.4:
-        label = "moderate"
-    elif strength >= 0.2:
-        label = "weak"
-    else:
-        label = "very weak"
-
-    if value > 0:
-        direction = "positive"
-    elif value < 0:
-        direction = "negative"
-    else:
-        direction = "no"
-
-    return f"{label} {direction} relationship"
-
-
 def print_report(students) -> None:
     """Print the pandas-based student performance report."""
     ranked = rank_students(students)
@@ -48,7 +24,7 @@ def print_report(students) -> None:
     overall_average = float(ranked["average"].mean())
     correlation = study_hours_correlation(students)
 
-    print("STUDENT PERFORMANCE ANALYZER - VERSION 2")
+    print("STUDENT PERFORMANCE ANALYZER - VERSION 3")
     print("-" * 42)
     print(f"Students analyzed: {len(students)}")
     print(f"Overall class average: {overall_average:.1f}%")
