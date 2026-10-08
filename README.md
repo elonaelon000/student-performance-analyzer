@@ -67,7 +67,7 @@ python3 -m pip install -r requirements.txt
 streamlit run streamlit_app.py
 ```
 
-The dashboard uses the included sample dataset by default. You can upload another CSV from the sidebar without changing the source code.
+The dashboard opens in a clean empty state. Upload your own CSV to begin, or explicitly choose the demo dataset to preview the analytics experience.
 
 The uploaded file must contain:
 
@@ -79,14 +79,16 @@ name,math,programming,statistics,study_hours
 
 The web interface displays:
 
+- branded black-and-pink landing experience with no data preloaded
+- optional demo dataset and CSV upload workflow
 - number of students analyzed
 - overall class average
 - pass rate
 - top-performing student
 - Pearson correlation between study hours and overall average
 - a ranking table with a minimum-average filter
-- an interactive subject-average bar chart
-- an interactive study-hours scatter plot
+- interactive subject-performance and study-pattern charts
+- concise insight cards generated from the loaded dataset
 
 Correlation is presented as an association in the available dataset and is not treated as proof of causation.
 
