@@ -13,6 +13,7 @@ from dashboard import (
 )
 
 DATA_FILE = Path("data/students.csv")
+CSV_EXAMPLE = """name,math,programming,statistics,study_hours\nAda,90,85,88,10\nBen,72,78,75,7"""
 
 st.set_page_config(
     page_title="Student Performance Analyzer",
@@ -410,14 +411,7 @@ if data_source is None:
             )
 
     with st.expander("CSV format"):
-        st.code(
-            "name,math,programming,statistics,study_hours
-"
-            "Ada,90,85,88,10
-"
-            "Ben,72,78,75,7",
-            language="text",
-        )
+        st.code(CSV_EXAMPLE, language="text")
     st.stop()
 
 with st.sidebar:
@@ -431,14 +425,7 @@ with st.sidebar:
         step=5,
     )
     with st.expander("Expected CSV format"):
-        st.code(
-            "name,math,programming,statistics,study_hours
-"
-            "Ada,90,85,88,10
-"
-            "Ben,72,78,75,7",
-            language="text",
-        )
+        st.code(CSV_EXAMPLE, language="text")
     if st.button("Start over", use_container_width=True):
         st.session_state.demo_mode = False
         st.session_state.uploader_key += 1
